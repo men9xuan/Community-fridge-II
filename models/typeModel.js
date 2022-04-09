@@ -17,6 +17,8 @@ let typeSchema = Schema({
     }
 });
 
-const Type = mongoose.model("Type", typeSchema);
+// const Type = mongoose.model("Type", typeSchema);
 
-module.exports = Type;
+// module.exports = Type;
+
+module.exports = mongoose.model("Type", typeSchema);
