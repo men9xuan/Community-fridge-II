@@ -123,33 +123,99 @@ router.put("/:fid", function (req, res, next) {
 });
 
 // 3.1.5 Adding an item in the fridge
+// router.post("/:fridgeID/items", function (req, res, next) {
+// 	console.log("add item to fridge");
+// 	console.log(req.body.id);
+// 	// find if item existed 
+// 	Fridge.findOne({ id: req.params.fridgeID }, function (err, result) {
+// 		console.log("fridge result");
+// 		console.log(result);
+// 		if (result != null) {
+// 			// check if item exists in fridge
+// 			let index = result.items.findIndex(object => {
+// 				return object.id == req.body.id;
+// 			});
+// 			// check if item exists in item list
+// 			Item.findOne({ id: req.body.id }, function (err, result) {
+// 				console.log("result");
+// 				console.log(result);
+// 				if (result == null) {
+// 					res.status(409).send("Item does not exist in item list");
+// 				} else {
+// 					if (index != -1) {
+// 						res.status(409).send("Item existed in fridge");
+// 					} else {
+// 						let newItem = { id: req.body.id, quantity: req.body.quantity };
+// 						result.items.push(newItem);
+// 						result.save(function (err, result) {
+// 							if (err) {
+// 								res.status(400).send(err.message);
+// 							} else {
+// 								res.status(200);
+// 								res.send("Item added successfully");
+// 							}
+// 						});
+// 					}
+// 				}
+// 			})
+// 			// console.log("index:" + index);
+// 			// if (index != -1) {
+// 			// 	res.status(409).send("Item existed in fridge");
+// 			// } else {
+// 			// 	let newItem = { id: req.body.id, quantity: req.body.quantity };
+// 			// 	result.items.push(newItem);
+// 			// 	result.save(function (err, result) {
+// 			// 		if (err) {
+// 			// 			res.status(400).send(err.message);
+// 			// 		} else {
+// 			// 			res.status(200);
+// 			// 			res.send("Item added successfully");
+// 			// 		}
+// 			// 	});
+// 			// }
+// 		} else {
+// 			res.status(404).send("Fridge not found");
+// 		}
+// 	});
+// });
+
+
+
 router.post("/:fridgeID/items", function (req, res, next) {
 	console.log("add item to fridge");
 	console.log(req.body.id);
-	// find if item existed 
-	Fridge.findOne({ id: req.params.fridgeID }, function (err, result) {
-		if (result != null) {
-			let index = result.items.findIndex(object => {
-				return object.id == req.body.id;
-			});
-			console.log("index:" + index);
-			if (index != -1) {
-				res.status(409).send("Item existed");
-			} else {
-				let newItem = { id: req.body.id, quantity: 0 };
-				result.items.push(newItem);
-				result.save(function (err, result) {
-					if (err) {
-						res.status(400).send(err.message);
-					} else {
-						res.status(200);
-						res.send("Item added successfully");
-					}
-				});
-			}
+	// find if item existed in Item
+	Item.findOne({ id: req.body.id }, function (err, result) {
+		console.log("Item result");
+		console.log(result);
+		if (result == null) {
+			res.status(409).send("Item does not exist in item list");
 		} else {
-			res.status(404).send("Fridge not found");
+			Fridge.findOne({ id: req.params.fridgeID }, function (err, result) {
+				if (result != null) {
+					let index = result.items.findIndex(object => {
+						return object.id == req.body.id;
+					});
+					if (index != -1) {
+						res.status(409).send("Item existed in fridge");
+					} else {
+						let newItem = { id: req.body.id, quantity: req.body.quantity };
+						result.items.push(newItem);
+						result.save(function (err, result) {
+							if (err) {
+								res.status(400).send(err.message);
+							} else {
+								res.status(200);
+								res.send("Item added successfully");
+							}
+						});
+					}
+				} else {
+					res.status(404).send("Fridge not found");
+				}
+			});
 		}
+
 	});
 });
 
@@ -281,21 +347,26 @@ router.post("/items", function (req, res, next) {
 			console.log("duplicate");
 			res.status(409).send("Item duplicated");
 		} else {
-			let newItem = {
-				id: req.body.id,
-				name: req.body.name,
-				type: req.body.type,
-				img: req.body.img
-			};
-			Item.create(newItem, function (err, result) {
-				if (err) {
-					// throw err;
-					res.status(400).send(err.message);
-				} else {
-					res.status(200);
-					res.send("New item added successfully to the items collection");
-				}
+			Item.count({}, function (err, count) {
+				if (err) throw err;
+				let newItem = {
+					id: count + 1,
+					name: req.body.name,
+					type: req.body.type,
+					img: req.body.img
+				};
+				Item.create(newItem, function (err, result) {
+					if (err) {
+						// throw err;
+						res.status(400).send(err.message);
+					} else {
+						res.status(200);
+						res.send("New item added successfully to the items collection");
+					}
+				});
 			});
+
+
 		}
 	});
 });
@@ -304,18 +375,18 @@ router.post("/items", function (req, res, next) {
 // need to find the id from another table
 router.get("/search/items", function (req, res, next) {
 	console.log(req.query);
-	if (req.query.name == undefined	|| req.query.type == undefined || req.query.type ==""){
+	if (req.query.name == undefined || req.query.type == undefined || req.query.type == "") {
 		res.status(400);
 		res.send("improperly formatted query ");
 		return;
 	}
-	Type.find({name: req.query.type},  function(err, result){
-		if (err){
+	Type.find({ name: req.query.type }, function (err, result) {
+		if (err) {
 			res.status(400).send(err.message);
-		}else if (result.length >0){
+		} else if (result.length > 0) {
 			console.log(result[0].id);
 			let type = result[0].id;
-			Item.find({name:{ "$regex": req.query.name, "$options": "i" }, type: type}, function (err,result){
+			Item.find({ name: { "$regex": req.query.name, "$options": "i" }, type: type }, function (err, result) {
 				// console.log(result);
 				if (err) {
 					// throw err;
@@ -325,14 +396,16 @@ router.get("/search/items", function (req, res, next) {
 					res.send(result);
 				}
 			});
-		}else{
+		} else {
 			res.status(404).send();
 		}
 	});
-	
+
 
 });
 
+// other routes provided from starter codes. 
+// Likely these will never accessible due to added routes above
 
 // helper route, which returns the accepted types currently available in our application. This is used by the addFridge.html page
 router.get("/types", function (req, res, next) {

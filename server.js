@@ -15,6 +15,7 @@ console.log(app.locals.fridges);
 app.locals.items = require('./data/comm-fridge-items.json');
 
 const fridgesRouter = require("./fridge-router.js");
+const itemRouter = require("./item-router.js");
 
 let db;
 app.locals.db = db;
@@ -34,6 +35,7 @@ app.use((req,_,next)=> {
 //Mount the fridge router to the path /fridges
 //All requests starting with /fridges will be forwarded to this router
 app.use("/fridges", fridgesRouter);
+app.use("/", itemRouter);
 
 //Start the connection to the database
 mongoose.connect(config.db.host, {useNewUrlParser: true, useUnifiedTopology: true});
