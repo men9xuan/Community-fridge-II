@@ -6,8 +6,8 @@ let typeSchema = Schema({
     id:{
         type:String,
         required:[true, "Type id is required"],
-        minlength:1,
-        maxlength:4
+        minlength:[1,"Min id length is 1"],
+        maxlength:[4,"Max id length is 4"]
     },
     name:{
         type:String,

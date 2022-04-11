@@ -6,14 +6,14 @@ let fridgeSchema = Schema({
     id: {
         type: String,
         required: true,
-        minLength: [4,"Min length for fridgeId is 4"],
-        maxLength: [6,"Max length for fridgeId is 6"]
+        minLength: [4, "Min length for fridgeId is 4"],
+        maxLength: [6, "Max length for fridgeId is 6"]
     },
     name: {
         type: String,
         required: [true, "Fridge name is required"],
-        minLength: [2,"Min length for fridge name is 2"],
-        maxLength: [20,"Max length for fridge name is 20"]
+        minLength: [2, "Min length for fridge name is 2"],
+        maxLength: [20, "Max length for fridge name is 20"]
     },
     numItemsAccepted: {
         type: Number,
@@ -25,13 +25,14 @@ let fridgeSchema = Schema({
         max: [100, "Maximum is 100 for canAcceptItems"]
     },
     contactInfo: {
-        contactPerson: { 
-            type: String ,
+        contactPerson: {
+            type: String,
             required: true
-        },  
-        contactPhone: { type: String,
+        },
+        contactPhone: {
+            type: String,
             required: true
-         }
+        }
     },
     address: {
         street: {
@@ -61,8 +62,8 @@ let fridgeSchema = Schema({
         required: true
     },
     items: [{
-        id: {type: String, required: true},
-        quantity: {type: Number, required: true}
+        id: { type: String, required: true },
+        quantity: { type: Number, required: true }
     }]
 });
 

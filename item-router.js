@@ -16,11 +16,11 @@ app.use(express.json()); // body-parser middleware
 
 // // 3.2.2 Adding a new item into the items collection
 
-// ?? routes? /fridges/items  or /items
+// routes /items
 router.post("/items", function (req, res, next) {
 	console.log("add item to items");
 	console.log(req.body);
-	// find if item existed  ?? need to check if id exists ????
+	// find if item existed, need to check if id exists 
 	Item.findOne({ name: req.body.name }, function (err, result) {
 		if (result != null) {
 			console.log("duplicate");
@@ -54,7 +54,7 @@ router.post("/items", function (req, res, next) {
 // need to find the id from another table
 router.get("/search/items", function (req, res, next) {
 	console.log(req.query);
-	if (req.query.name == undefined || req.query.type == undefined || req.query.type == "") {
+	if (req.query.name == undefined && req.query.type == undefined || req.query.type == "") {
 		res.status(400);
 		res.send("improperly formatted query ");
 		return;
@@ -82,6 +82,5 @@ router.get("/search/items", function (req, res, next) {
 
 
 });
-
 
 module.exports = router;
