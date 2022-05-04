@@ -4,7 +4,9 @@ This is my 4th course assignment of COMP 2406 Winter 22
 
 It connects the Community fridge web application to a MongoDB database.
 
-Upon server start, all local JSON data is imported to a MongoDB database. 
+Upon server starts, all local JSON data is imported to a MongoDB database. 
+
+You may need to change username password dbname in config.js to point to your own database.
 
 All subsequent queries are handled by the MongoDB database.
 
