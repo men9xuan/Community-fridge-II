@@ -1,6 +1,6 @@
 ## Community fridge web application with MongoDB
 
-This is my 4th course assignment of COMP 2406
+This is my 4th course assignment of COMP 2406 Winter 22
 
 It connects the Community fridge web application to a MongoDB database.
 
