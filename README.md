@@ -15,10 +15,10 @@ This web application supports the following database queries:
 | Request | URL                                                | Content type | Description                                                                        |  
 |---------|----------------------------------------------------|--------------|------------------------------------------------------------------------------------|
 | GET     | /fridges                                           | JSON         | Retrieving information for all fridges                                             |
-| GET     | /fridges:/fridgeID                                 |              | Retrieving data associated with a specific fridge                                  |
+| GET     | /fridges/:fridgeID                                 |              | Retrieving data associated with a specific fridge                                  |
 | GET     | /search/items?type=TYPE&name=NAME                  |              | Search for an item in the items collection with type = TYPE and name contains NAME |
 | POST    | /itemsJSON                                         |              | Adding a new item into the items collection                                        |
-| PUT     | /fridges:/fridgeID                                 |              | Updating information about a fridge                                                |
+| PUT     | /fridges/:fridgeID                                 |              | Updating information about a fridge                                                |
 | POST    | /fridges/:fridgeID/items                           | JSON         | Adding an item in the fridge                                                       |
 | DELETE  | /fridges/:fridgeID/items/:itemID                   |              | Deleting an item from a fridge                                                     |
 | DELETE  | /fridges/:fridgeID/items?item=itemId1&item=itemId2 |              | Delete itemId1 and itemId2 from fridgeID                                           |
